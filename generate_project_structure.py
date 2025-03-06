@@ -1,0 +1,58 @@
+import os
+
+# Define the project structure
+project_structure = {
+    ".env": "DATABASE_URI=postgresql://user:password@localhost:5432/hotel_db",
+    ".gitignore": "__pycache__/\n.env\n*.pyc\n*.pyo\n*.pyd\n*.db\n*.sqlite3\nvenv/\n",
+    "README.md": "# Hotel Management System\n\nThis project is a Flask-based web application for managing hotels, rooms, reservations, and payments.",
+    "requirements.txt": "flask\nsqlalchemy\nalembic\npython-dotenv",
+    "Dockerfile": "FROM python:3.9-slim\n\nWORKDIR /app\n\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n\nCOPY . .\n\nCMD [\"python\", \"src/website/app.py\"]",
+    "railway.json": "{\n  \"build\": {\n    \"builder\": \"NIXPACKS\"\n  },\n  \"deploy\": {\n    \"startCommand\": \"python src/website/app.py\"\n  }\n}",
+    "scripts/start.sh": "#!/bin/bash\npython src/website/app.py",
+    "scripts/migrate_db.sh": "#!/bin/bash\nalembic upgrade head",
+    "scripts/deploy.sh": "#!/bin/bash\necho 'Deploying to Railway...'\nrailway up",
+    "src/website/__init__.py": "",
+    "src/website/app.py": "from flask import Flask\nfrom src.website.routes.main_routes import main_routes\nfrom src.website.routes.api_routes import api_routes\nfrom src.website.routes.admin_routes import admin_routes\n\napp = Flask(__name__)\n\n# Register blueprints\napp.register_blueprint(main_routes)\napp.register_blueprint(api_routes)\napp.register_blueprint(admin_routes)\n\nif __name__ == '__main__':\n    app.run(host='0.0.0.0', port=5000)",
+    "src/website/models/__init__.py": "",
+    "src/website/models/database.py": "from sqlalchemy import create_engine\nfrom sqlalchemy.ext.declarative import declarative_base\nfrom sqlalchemy.orm import sessionmaker\n\nDATABASE_URI = 'postgresql://user:password@localhost:5432/hotel_db'\n\nengine = create_engine(DATABASE_URI)\nSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\n\nBase = declarative_base()",
+    "src/website/models/hotel.py": "from sqlalchemy import Column, Integer, String\nfrom sqlalchemy.orm import relationship\nfrom src.website.models.database import Base\n\nclass Hotel(Base):\n    __tablename__ = 'hotels'\n    hotel_id = Column(Integer, primary_key=True)\n    name = Column(String(100), nullable=False)\n    address = Column(String(255), nullable=False)\n    city = Column(String(100), nullable=False)\n    country = Column(String(100), nullable=False)\n    phone = Column(String(20), nullable=False)\n    email = Column(String(100), nullable=False)\n    star_rating = Column(Integer, nullable=False)\n\n    rooms = relationship('Room', back_populates='hotel')",
+    "src/website/models/room.py": "from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Numeric\nfrom sqlalchemy.orm import relationship\nfrom src.website.models.database import Base\n\nclass Room(Base):\n    __tablename__ = 'rooms'\n    room_id = Column(Integer, primary_key=True)\n    hotel_id = Column(Integer, ForeignKey('hotels.hotel_id', ondelete='CASCADE'))\n    room_number = Column(String(10), nullable=False)\n    room_type = Column(String(50), nullable=False)\n    price_per_night = Column(Numeric(10, 2), nullable=False)\n    capacity = Column(Integer, nullable=False)\n    is_available = Column(Boolean, default=True)\n\n    hotel = relationship('Hotel', back_populates='rooms')\n    reservations = relationship('Reservation', back_populates='room')",
+    "src/website/models/reservation.py": "from sqlalchemy import Column, Integer, ForeignKey, Date, Numeric, String\nfrom sqlalchemy.orm import relationship\nfrom src.website.models.database import Base\n\nclass Reservation(Base):\n    __tablename__ = 'reservations'\n    reservation_id = Column(Integer, primary_key=True)\n    guest_id = Column(Integer, ForeignKey('guests.guest_id', ondelete='CASCADE'))\n    room_id = Column(Integer, ForeignKey('rooms.room_id', ondelete='CASCADE'))\n    check_in_date = Column(Date, nullable=False)\n    check_out_date = Column(Date, nullable=False)\n    total_price = Column(Numeric(10, 2), nullable=False)\n    status = Column(String(20), default='Pending')\n\n    guest = relationship('Guest', back_populates='reservations')\n    room = relationship('Room', back_populates='reservations')",
+    "src/website/models/guest.py": "from sqlalchemy import Column, Integer, String\nfrom sqlalchemy.orm import relationship\nfrom src.website.models.database import Base\n\nclass Guest(Base):\n    __tablename__ = 'guests'\n    guest_id = Column(Integer, primary_key=True)\n    first_name = Column(String(50), nullable=False)\n    last_name = Column(String(50), nullable=False)\n    email = Column(String(100), unique=True, nullable=False)\n    phone = Column(String(20), nullable=False)\n    address = Column(String(255))\n    city = Column(String(100))\n    country = Column(String(100))\n\n    reservations = relationship('Reservation', back_populates='guest')",
+    "src/website/models/staff.py": "from sqlalchemy import Column, Integer, String, ForeignKey, Date\nfrom sqlalchemy.orm import relationship\nfrom src.website.models.database import Base\n\nclass Staff(Base):\n    __tablename__ = 'staff'\n    staff_id = Column(Integer, primary_key=True)\n    hotel_id = Column(Integer, ForeignKey('hotels.hotel_id', ondelete='CASCADE'))\n    first_name = Column(String(50), nullable=False)\n    last_name = Column(String(50), nullable=False)\n    role = Column(String(50), nullable=False)\n    phone = Column(String(20), nullable=False)\n    email = Column(String(100), unique=True, nullable=False)\n    hire_date = Column(Date, nullable=False)",
+    "src/website/models/payment.py": "from sqlalchemy import Column, Integer, ForeignKey, Numeric, String, TIMESTAMP\nfrom sqlalchemy.orm import relationship\nfrom src.website.models.database import Base\n\nclass Payment(Base):\n    __tablename__ = 'payments'\n    payment_id = Column(Integer, primary_key=True)\n    reservation_id = Column(Integer, ForeignKey('reservations.reservation_id', ondelete='CASCADE'))\n    payment_date = Column(TIMESTAMP, default='CURRENT_TIMESTAMP')\n    amount = Column(Numeric(10, 2), nullable=False)\n    payment_method = Column(String(50), nullable=False)\n    status = Column(String(20), default='Pending')",
+    "src/website/models/service.py": "from sqlalchemy import Column, Integer, String, Numeric, Text\nfrom sqlalchemy.orm import relationship\nfrom src.website.models.database import Base\n\nclass Service(Base):\n    __tablename__ = 'services'\n    service_id = Column(Integer, primary_key=True)\n    name = Column(String(100), nullable=False)\n    description = Column(Text)\n    price = Column(Numeric(10, 2), nullable=False)",
+    "src/website/models/room_service.py": "from sqlalchemy import Column, Integer, ForeignKey\nfrom sqlalchemy.orm import relationship\nfrom src.website.models.database import Base\n\nclass RoomService(Base):\n    __tablename__ = 'room_services'\n    room_id = Column(Integer, ForeignKey('rooms.room_id', ondelete='CASCADE'), primary_key=True)\n    service_id = Column(Integer, ForeignKey('services.service_id', ondelete='CASCADE'), primary_key=True)",
+    "src/website/routes/__init__.py": "",
+    "src/website/routes/main_routes.py": "from flask import Blueprint, render_template\nfrom src.website.models.database import SessionLocal\nfrom src.website.models.hotel import Hotel\n\nmain_routes = Blueprint('main_routes', __name__)\n\n@main_routes.route('/')\ndef home():\n    db = SessionLocal()\n    hotels = db.query(Hotel).all()\n    db.close()\n    return render_template('index.html', hotels=hotels)",
+    "src/website/routes/api_routes.py": "from flask import Blueprint, jsonify\nfrom src.website.models.database import SessionLocal\nfrom src.website.models.room import Room\n\napi_routes = Blueprint('api_routes', __name__)\n\n@api_routes.route('/api/rooms/<int:hotel_id>')\ndef get_rooms(hotel_id):\n    db = SessionLocal()\n    rooms = db.query(Room).filter(Room.hotel_id == hotel_id, Room.is_available == True).all()\n    db.close()\n    return jsonify([{\n        'room_id': room.room_id,\n        'room_number': room.room_number,\n        'room_type': room.room_type,\n        'price_per_night': float(room.price_per_night),\n        'capacity': room.capacity\n    } for room in rooms])",
+    "src/website/routes/admin_routes.py": "from flask import Blueprint, render_template\n\nadmin_routes = Blueprint('admin_routes', __name__)\n\n@admin_routes.route('/admin')\ndef admin_dashboard():\n    return render_template('admin/dashboard.html')",
+    "src/website/templates/base.html": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Hotel Management System</title>\n    <link rel=\"stylesheet\" href=\"{{ url_for('static', filename='css/styles.css') }}\">\n</head>\n<body>\n    {% block content %}{% endblock %}\n</body>\n</html>",
+    "src/website/templates/index.html": "{% extends 'base.html' %}\n\n{% block content %}\n<h1>Welcome to the Hotel Management System</h1>\n<ul>\n    {% for hotel in hotels %}\n    <li>\n        <h2>{{ hotel.name }}</h2>\n        <p>{{ hotel.city }}, {{ hotel.country }}</p>\n        <a href=\"/hotels/{{ hotel.hotel_id }}\">View Rooms</a>\n    </li>\n    {% endfor %}\n</ul>\n{% endblock %}",
+    "src/website/templates/admin/dashboard.html": "{% extends 'base.html' %}\n\n{% block content %}\n<h1>Admin Dashboard</h1>\n<p>Manage hotels, rooms, and reservations here.</p>\n{% endblock %}",
+    "src/website/static/css/styles.css": "body { font-family: Arial, sans-serif; }\nh1 { color: #333; }",
+    "src/website/static/js/scripts.js": "console.log('Website scripts loaded');",
+    "src/website/static/images/": "",
+    "src/tests/__init__.py": "",
+    "src/tests/test_models.py": "import unittest\nfrom src.website.models.database import SessionLocal, Base\n\nclass TestModels(unittest.TestCase):\n    def test_hotel_model(self):\n        db = SessionLocal()\n        hotel = db.query(Hotel).first()\n        self.assertIsNotNone(hotel)\n        db.close()\n\nif __name__ == '__main__':\n    unittest.main()",
+    "src/tests/test_routes.py": "import unittest\nfrom src.website.app import app\n\nclass TestRoutes(unittest.TestCase):\n    def test_home_route(self):\n        client = app.test_client()\n        response = client.get('/')\n        self.assertEqual(response.status_code, 200)\n\nif __name__ == '__main__':\n    unittest.main()",
+    "migrations/alembic.ini": "[alembic]\nsqlalchemy.url = postgresql://user:password@localhost:5432/hotel_db\n\n[loggers]\nkeys = root,sqlalchemy\n\n[handlers]\nkeys = console\n\n[formatters]\nkeys = generic\n\n[logger_root]\nlevel = WARN\nhandlers = console\nqualname =\n\n[logger_sqlalchemy]\nlevel = WARN\nhandlers =\nqualname = sqlalchemy.engine\n\n[handler_console]\nclass = StreamHandler\nargs = (sys.stderr,)\nlevel = NOTSET\nformatter = generic\n\n[formatter_generic]\nformat = %(levelname)-5.5s [%(name)s] %(message)s\ndatefmt = %H:%M:%S",
+    "migrations/versions/": "",
+    "docs/architecture.md": "# Architecture\n\nThis document describes the architecture of the Hotel Management System.",
+    "docs/api_documentation.md": "# API Documentation\n\nThis document describes the API endpoints for the project.",
+    "docs/user_manual.md": "# User Manual\n\nThis document provides instructions for using the Hotel Management System."
+}
+
+# Create the project structure
+for path, content in project_structure.items():
+    # Create directories
+    dir_path = os.path.dirname(path)
+    if dir_path and not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    
+    # Create files
+    if not os.path.exists(path):
+        with open(path, "w") as f:
+            f.write(content)
+
+print("Hotel Management System project structure created successfully!")

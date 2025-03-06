@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Welcome to the Hotel Management System</h1>
+<ul>
+    {% for hotel in hotels %}
+    <li>
+        <h2>{{ hotel.name }}</h2>
+        <p>{{ hotel.city }}, {{ hotel.country }}</p>
+        <a href="/hotels/{{ hotel.hotel_id }}">View Rooms</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
