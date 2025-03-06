@@ -1,0 +1,196 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h2, h3 {
+    text-align: center;
+}
+
+/* Header */
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.nav-links li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* Container */
+.container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Hotel List */
+.hotel-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.hotel-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.hotel-card h3 {
+    margin: 10px 0;
+}
+
+.hotel-card p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.hotel-card .btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.hotel-card .btn:hover {
+    background: #2980b9;
+}
+
+/* Room List */
+.room-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.room-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    text-align: center;
+}
+
+.room-card h4 {
+    margin-bottom: 10px;
+}
+
+.room-card p {
+    font-size: 14px;
+}
+
+.room-card .btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #27ae60;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.room-card .btn:hover {
+    background: #219150;
+}
+
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    margin: auto;
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+button {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #c0392b;
+}
+
+/* Messages */
+.messages {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.messages li {
+    padding: 10px;
+    margin: 5px auto;
+    border-radius: 5px;
+    width: 50%;
+}
+
+.messages .success {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.messages .danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    background: #2c3e50;
+    color: white;
+    padding: 10px 0;
+    margin-top: 20px;
+}

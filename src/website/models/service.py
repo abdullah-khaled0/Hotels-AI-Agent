@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, Numeric, Text
 from sqlalchemy.orm import relationship
-from src.website.models.database import Base
+from website.models.database import db
 
-class Service(Base):
+class Service(db.Model):
     __tablename__ = 'services'
     service_id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)

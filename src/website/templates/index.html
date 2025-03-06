@@ -1,14 +1,16 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% block title %}Available Hotels{% endblock %}
 
 {% block content %}
-<h1>Welcome to the Hotel Management System</h1>
-<ul>
+<h2>Available Hotels</h2>
+<div class="hotel-list">
     {% for hotel in hotels %}
-    <li>
-        <h2>{{ hotel.name }}</h2>
-        <p>{{ hotel.city }}, {{ hotel.country }}</p>
-        <a href="/hotels/{{ hotel.hotel_id }}">View Rooms</a>
-    </li>
+    <div class="hotel-card">
+        <h3>{{ hotel.name }}</h3>
+        <p><strong>Address:</strong> {{ hotel.address }}, {{ hotel.city }}, {{ hotel.country }}</p>
+        <p><strong>Rating:</strong> ⭐ {{ hotel.star_rating }}</p>
+        <a href="{{ url_for('hotel_details', hotel_id=hotel.hotel_id) }}" class="btn">View Details</a>
+    </div>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ hotel.name }}{% endblock %}
+
+{% block content %}
+<h2>{{ hotel.name }}</h2>
+<p><strong>Address:</strong> {{ hotel.address }}, {{ hotel.city }}, {{ hotel.country }}</p>
+<p><strong>Phone:</strong> {{ hotel.phone }}</p>
+<p><strong>Email:</strong> {{ hotel.email }}</p>
+<p><strong>Rating:</strong> ⭐ {{ hotel.star_rating }}</p>
+
+<h3>Available Rooms</h3>
+<div class="room-list">
+    {% for room in rooms %}
+    <div class="room-card">
+        <h4>Room {{ room.room_number }}</h4>
+        <p>Type: {{ room.room_type }}</p>
+        <p>Price: ${{ room.price_per_night }} per night</p>
+        <p>Capacity: {{ room.capacity }} persons</p>
+        <a href="{{ url_for('room_details', room_id=room.room_id) }}" class="btn">Reserve</a>
+    </div>
+    {% endfor %}
+</div>
+<a href="{{ url_for('index') }}" class="btn back-btn">Back to Home</a>
+{% endblock %}

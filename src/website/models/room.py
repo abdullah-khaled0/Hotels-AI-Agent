@@ -1,16 +1,18 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Numeric
-from sqlalchemy.orm import relationship
-from src.website.models.database import Base
+from website.models.database import db
 
-class Room(Base):
+class Room(db.Model):
     __tablename__ = 'rooms'
-    room_id = Column(Integer, primary_key=True)
-    hotel_id = Column(Integer, ForeignKey('hotels.hotel_id', ondelete='CASCADE'))
-    room_number = Column(String(10), nullable=False)
-    room_type = Column(String(50), nullable=False)
-    price_per_night = Column(Numeric(10, 2), nullable=False)
-    capacity = Column(Integer, nullable=False)
-    is_available = Column(Boolean, default=True)
 
-    hotel = relationship('Hotel', back_populates='rooms')
-    reservations = relationship('Reservation', back_populates='room')
+    room_id = db.Column(db.Integer, primary_key=True)
+    hotel_id = db.Column(db.Integer, db.ForeignKey('hotels.hotel_id', ondelete='CASCADE'))
+    room_number = db.Column(db.String(10), nullable=False)
+    room_type = db.Column(db.String(50), nullable=False)
+    price_per_night = db.Column(db.Numeric(10, 2), nullable=False)
+    capacity = db.Column(db.Integer, nullable=False)
+    is_available = db.Column(db.Boolean, default=True)
+
+    hotel = db.relationship('Hotel', back_populates='rooms')
+    reservations = db.relationship('Reservation', back_populates='room', cascade="all, delete")
+
+    def __repr__(self):
+        return f"<Room(id={self.room_id}, number={self.room_number})>"

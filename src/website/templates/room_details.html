@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Reserve Room{% endblock %}
+
+{% block content %}
+<h2>Reserve Room: {{ room.room_type }}</h2>
+<p><strong>Room Number:</strong> {{ room.room_number }}</p>
+<p><strong>Price per Night:</strong> ${{ room.price_per_night }}</p>
+<p><strong>Capacity:</strong> {{ room.capacity }} persons</p>
+
+<form method="POST">
+    <label for="first_name">First Name:</label>
+    <input type="text" id="first_name" name="first_name" required>
+
+    <label for="last_name">Last Name:</label>
+    <input type="text" id="last_name" name="last_name" required>
+
+    <label for="guest_email">Email:</label>
+    <input type="email" id="guest_email" name="guest_email" required>
+
+    <label for="phone">Phone:</label>
+    <input type="text" id="phone" name="phone" required>
+
+    <label for="check_in_date">Check-In Date:</label>
+    <input type="date" id="check_in_date" name="check_in_date" required>
+
+    <label for="check_out_date">Check-Out Date:</label>
+    <input type="date" id="check_out_date" name="check_out_date" required>
+
+    <button type="submit">Confirm Reservation</button>
+</form>
+<a href="{{ url_for('hotel_details', hotel_id=room.hotel_id) }}" class="btn back-btn">Back to Hotel</a>
+{% endblock %}

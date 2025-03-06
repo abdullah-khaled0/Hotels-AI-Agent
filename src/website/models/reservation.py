@@ -1,16 +1,18 @@
-from sqlalchemy import Column, Integer, ForeignKey, Date, Numeric, String
-from sqlalchemy.orm import relationship
-from src.website.models.database import Base
+from website.models.database import db
 
-class Reservation(Base):
+class Reservation(db.Model):
     __tablename__ = 'reservations'
-    reservation_id = Column(Integer, primary_key=True)
-    guest_id = Column(Integer, ForeignKey('guests.guest_id', ondelete='CASCADE'))
-    room_id = Column(Integer, ForeignKey('rooms.room_id', ondelete='CASCADE'))
-    check_in_date = Column(Date, nullable=False)
-    check_out_date = Column(Date, nullable=False)
-    total_price = Column(Numeric(10, 2), nullable=False)
-    status = Column(String(20), default='Pending')
 
-    guest = relationship('Guest', back_populates='reservations')
-    room = relationship('Room', back_populates='reservations')
+    reservation_id = db.Column(db.Integer, primary_key=True)
+    guest_id = db.Column(db.Integer, db.ForeignKey('guests.guest_id', ondelete='CASCADE'))  # ✅ Fixed ForeignKey
+    room_id = db.Column(db.Integer, db.ForeignKey('rooms.room_id', ondelete='CASCADE'))
+    check_in_date = db.Column(db.Date, nullable=False)
+    check_out_date = db.Column(db.Date, nullable=False)
+    total_price = db.Column(db.Numeric(10, 2), nullable=False)
+    status = db.Column(db.String(20), default='Pending')
+
+    guest = db.relationship('Guest', back_populates='reservations')  # ✅ Added relationship
+    room = db.relationship('Room', back_populates='reservations')
+
+    def __repr__(self):
+        return f"<Reservation(id={self.reservation_id}, guest_id={self.guest_id}, room={self.room_id})>"
