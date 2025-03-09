@@ -1,14 +1,18 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
+from ai_agent.crew import run
 from website.models.database import db
 from website.models.guest import Guest
 from website.models.hotel import Hotel
 from website.models.room import Room
 from website.models.reservation import Reservation
 
+from crewai.knowledge.source.text_file_knowledge_source import TextFileKnowledgeSource
+
 load_dotenv()
+
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URI")
@@ -60,7 +64,7 @@ def room_details(room_id):
         total_price = room.price_per_night * max((check_out - check_in).days, 1)
 
         reservation = Reservation(
-            guest_id=guest.guest_id,  # ✅ Store guest_id instead of guest_name
+            guest_id=guest.guest_id,
             room_id=room.room_id,
             check_in_date=check_in,
             check_out_date=check_out,
@@ -74,6 +78,37 @@ def room_details(room_id):
         return redirect(url_for('index'))
     
     return render_template('room_details.html', room=room)
+
+
+
+@app.route('/query', methods=['POST'])
+def query_agent():
+    # Get the user's query from the request body
+    data = request.json
+    user_query = data.get("query")
+
+    # Load the knowledge source
+    text_source = TextFileKnowledgeSource(file_paths="../knowledge/database_schema.txt")
+
+    print("user_query: ", user_query)
+
+    if not user_query:
+        return jsonify({"error": "No query provided"}), 400
+    
+
+    input = {
+        "query": user_query,
+        "schema": f"{text_source.content}"
+    }
+
+    # Kickoff the crew
+    result = run(input)
+
+    print("result: ", result)
+    print(type(result))
+
+    return jsonify({"result": str(result)})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
