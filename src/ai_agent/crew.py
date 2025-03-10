@@ -45,6 +45,7 @@ sql_task = Task(
         "2. Calculate the total price based on the room price (assume a single-night stay unless duration is specified). "
         "3. Use the 'Database Query Tool' to insert the reservation into the 'Reservations' table, including the calculated total_price. "
         "   Ensure the data includes at least: guest_id, room_id, date, and total_price. "
+        "Dont add the ids of Tables in the Final Answer."
         "Return the results in a user-friendly format, including confirmation of the insertion and the total price."
         "Respond in a pro style and tone."
     ),
