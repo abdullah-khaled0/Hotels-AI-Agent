@@ -1,54 +1,40 @@
-# AiAgent Crew
+# Hotel Management System
 
-Welcome to the AiAgent Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+![Hotel Management Banner](https://knowmax-ai-website.s3.amazonaws.com/wp-content/uploads/2022/01/14121055/knowledge-management-for-chatbot-functioning-1.png)  
+*A modern hotel management solution powered by Flask, SQLAlchemy, and AI-driven tools.*
 
-## Installation
+---
 
-Ensure you have Python >=3.10 <3.13 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
+## Overview
 
-First, if you haven't already, install uv:
+The **Hotel Management System** is a web-based application designed to streamline hotel operations, including room reservations, guest management, and hotel details tracking. Built with Flask and enhanced by CrewAI-powered AI agents, this system offers a seamless experience for both hotel staff and guests. It features a responsive UI, a smart chatbot, and robust database management capabilities.
 
-```bash
-pip install uv
-```
+---
 
-Next, navigate to your project directory and install the dependencies:
+## Features
 
-(Optional) Lock the dependencies and install them by using the CLI command:
-```bash
-crewai install
-```
-### Customizing
+- **Hotel & Room Listings**: Browse available hotels and rooms with details like pricing, capacity, and availability.
+- **Reservation Management**: Create, view, and cancel reservations with real-time updates.
+- **Guest Profiles**: Manage guest information securely and efficiently.
+- **AI-Powered Chatbot**: Integrated assistant for answering queries and assisting users.
+- **Database Operations**: SQL-based CRUD operations for hotels, rooms, guests, and reservations.
+- **Dynamic Pricing**: Automatically calculates total reservation costs based on room rates and stay duration.
+- **Responsive Design**: Clean and user-friendly interface adaptable to all devices.
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+---
 
-- Modify `src/ai_agent/config/agents.yaml` to define your agents
-- Modify `src/ai_agent/config/tasks.yaml` to define your tasks
-- Modify `src/ai_agent/crew.py` to add your own logic, tools and specific args
-- Modify `src/ai_agent/main.py` to add custom inputs for your agents and tasks
+## Tech Stack
 
-## Running the Project
+- **Backend**: Flask (Python), SQLAlchemy
+- **Frontend**: Jinja2 Templates, HTML, CSS, JavaScript
+- **Database**: PostgreSQL
+- **AI Tools**: CrewAI, Gemini LLM (Google API)
+- **Additional Libraries**: Pydantic (validation), SQLAlchemy (ORM)
 
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+---
 
-```bash
-$ crewai run
-```
-
-This command initializes the ai_agent Crew, assembling the agents and assigning them tasks as defined in your configuration.
-
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
-
-## Understanding Your Crew
-
-The ai_agent Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
-
-## Support
-
-For support, questions, or feedback regarding the AiAgent Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
-
-Let's create wonders together with the power and simplicity of crewAI.
+### Setup
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/abdullah-khaled0/Hotels-AI-Agent.git
+   cd Hotels-AI-Agent
