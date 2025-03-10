@@ -30,7 +30,7 @@
                 <p><strong>Price:</strong> <span class="price">EGP {{ "%.2f" | format(room.price_per_night) }} / night</span></p>
                 <p><strong>Capacity:</strong> {{ room.capacity }} persons</p>
             </div>
-            <a href="{{ url_for('room_details', room_id=room.room_id) }}" class="btn">Reserve Now</a>
+            <a href="{{ url_for('main_routes.room_details', room_id=room.room_id) }}" class="btn">Reserve Now</a>
         </div>
         {% else %}
         <p class="no-rooms">No rooms available at this time. Check back later!</p>
@@ -42,7 +42,7 @@
 
     <!-- Back Button -->
     <div class="back-container">
-        <a href="{{ url_for('index') }}" class="btn back-btn">Back to Hotels</a>
+        <a href="{{ url_for('main_routes.index') }}" class="btn back-btn">Back to Hotels</a>
     </div>
 </section>
 {% endblock %}

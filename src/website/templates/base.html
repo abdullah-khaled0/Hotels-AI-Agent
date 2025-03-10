@@ -11,13 +11,13 @@
 <body>
     <header>
         <h1 style="text-align: center;">
-            <a href="{{ url_for('index') }}" style="color: white; text-decoration: none;">Hotel Management System</a>
+            <a href="{{ url_for('main_routes.index') }}" style="color: white; text-decoration: none;">Hotel Management System</a>
         </h1>
         <nav>
             <ul class="nav-links">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('main_routes.index') }}">Home</a></li>
                 <li>
-                    <a href="{{ url_for('reservations') }}">
+                    <a href="{{ url_for('main_routes.reservations') }}">
                         Reservations
                         {% if reservation_count is defined and reservation_count > 0 %}
                             <span class="reservation-count">{{ reservation_count }}</span>

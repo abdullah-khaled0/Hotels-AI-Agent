@@ -9,7 +9,7 @@
         <h3>{{ hotel.name }}</h3>
         <p><strong>Address:</strong> {{ hotel.address }}, {{ hotel.city }}, {{ hotel.country }}</p>
         <p><strong>Rating:</strong> ⭐ {{ hotel.star_rating }}</p>
-        <a href="{{ url_for('hotel_details', hotel_id=hotel.hotel_id) }}" class="btn">View Details</a>
+        <a href="{{ url_for('main_routes.hotel_details', hotel_id=hotel.hotel_id) }}" class="btn">View Details</a>
     </div>
     {% endfor %}
 </div>

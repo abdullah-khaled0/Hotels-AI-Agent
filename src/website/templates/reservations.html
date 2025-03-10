@@ -13,7 +13,7 @@
         <p><strong>Total Price:</strong> EGP {{ reservation.total_price }}</p>
         <p><strong>Status:</strong> {{ reservation.status }}</p>
         <!-- Delete Button -->
-        <a href="{{ url_for('delete_reservation', reservation_id=reservation.reservation_id) }}" 
+        <a href="{{ url_for('main_routes.delete_reservation', reservation_id=reservation.reservation_id) }}" 
            class="btn delete-btn" 
            onclick="return confirm('Are you sure you want to delete this reservation? This action cannot be undone.');">
            Cancel Reservation

@@ -4,7 +4,7 @@
 {% block content %}
 <h2>Reserve Room: {{ room.room_type }}</h2>
 <p><strong>Room Number:</strong> {{ room.room_number }}</p>
-<p><strong>Price per Night:</strong> ${{ room.price_per_night }}</p>
+<p><strong>Price per Night:</strong> EGP {{ room.price_per_night }}</p>
 <p><strong>Capacity:</strong> {{ room.capacity }} persons</p>
 
 <form method="POST">
@@ -34,5 +34,5 @@
     </div>
     <button type="submit">Confirm Reservation</button>
 </form>
-<a href="{{ url_for('hotel_details', hotel_id=room.hotel_id) }}" class="btn back-btn">Back to Hotel</a>
+<a href="{{ url_for('main_routes.hotel_details', hotel_id=room.hotel_id) }}" class="btn back-btn">Back to Hotel</a>
 {% endblock %}
