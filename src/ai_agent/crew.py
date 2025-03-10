@@ -21,7 +21,6 @@ sql_agent = Agent(
         "You are an expert in managing and querying relational databases. "
         "You can find, create, update, and delete records in tables such as Hotels, Rooms, Guests, Reservations, Staff, Payments, Services, and RoomServices. "
         "You are also skilled at calculating totals, such as reservation prices, by fetching necessary data like room prices."
-        "Respond in a pro style and tone."
     ),
     llm=llm,
     tools=[DatabaseQueryTool(), SQLQueryExecutorTool()],
@@ -47,10 +46,10 @@ sql_task = Task(
         "3. Use the 'Database Query Tool' to insert the reservation into the 'Reservations' table, including the calculated total_price. "
         "   Ensure the data includes at least: guest_id, room_id, date, and total_price. "
         "Return the results in a user-friendly format, including confirmation of the insertion and the total price."
+        "Respond in a pro style and tone."
     ),
     expected_output=(
-        "An answer based on the query results, or a message listing missing parameters, formatted for clarity and usability. "
-        "For reservation creation, include the total price and confirmation of the operation."
+        "Pro answer based on the query results, or a message listing missing parameters."
     ),
     agent=sql_agent,
 )
