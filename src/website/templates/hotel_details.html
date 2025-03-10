@@ -27,7 +27,7 @@
             <div class="room-details">
                 <h4>Room {{ room.room_number }}</h4>
                 <p><strong>Type:</strong> {{ room.room_type }}</p>
-                <p><strong>Price:</strong> <span class="price">${{ "%.2f" | format(room.price_per_night) }} / night</span></p>
+                <p><strong>Price:</strong> <span class="price">EGP {{ "%.2f" | format(room.price_per_night) }} / night</span></p>
                 <p><strong>Capacity:</strong> {{ room.capacity }} persons</p>
             </div>
             <a href="{{ url_for('room_details', room_id=room.room_id) }}" class="btn">Reserve Now</a>
