@@ -1,18 +1,27 @@
+import os
 from crewai import LLM, Agent, Crew, Process, Task
 from ai_agent.tools.database_query_tool import DatabaseQueryTool
 from ai_agent.tools.sql_query_executor_tool import SQLQueryExecutorTool
 
-# Initialize LLM
-llm = LLM(model="gemini/gemini-2.0-flash", temperature=0)
+from crewai.memory import ShortTermMemory
+from crewai.memory.storage.rag_storage import RAGStorage
+
+
+
+google_api_key = os.getenv("GEMINI_API_KEY")
+llm = LLM(model="gemini/gemini-2.0-flash", temperature=0, api_key=google_api_key)
+
+storage_path = os.getenv("CREWAI_STORAGE_DIR")
 
 # Define Database Agent
-database_agent = Agent(
-    role="Database Agent",
+sql_agent = Agent(
+    role="SQL Agent",
     goal="Handle database-related queries and tasks across all tables, including calculating totals for reservations.",
     backstory=(
         "You are an expert in managing and querying relational databases. "
         "You can find, create, update, and delete records in tables such as Hotels, Rooms, Guests, Reservations, Staff, Payments, Services, and RoomServices. "
         "You are also skilled at calculating totals, such as reservation prices, by fetching necessary data like room prices."
+        "Respond in a pro style and tone."
     ),
     llm=llm,
     tools=[DatabaseQueryTool(), SQLQueryExecutorTool()],
@@ -20,10 +29,11 @@ database_agent = Agent(
 )
 
 # Define Database Task with enhanced instructions
-database_task = Task(
+sql_task = Task(
     description=(
         "Handle database-related queries and tasks based on the user's request: {query}. "
         "Use the provided database schema:\n\n{schema}\n\n"
+        "User my guest_id if needed:1"
         "to ensure the query is accurate and valid. "
         "Specify the table name, operation type ('find', 'create', 'update', 'delete'), and required parameters. "
         "Use the 'Database Query Tool' to execute operations like inserting, updating, or deleting records. "
@@ -42,16 +52,38 @@ database_task = Task(
         "An answer based on the query results, or a message listing missing parameters, formatted for clarity and usability. "
         "For reservation creation, include the total price and confirmation of the operation."
     ),
-    agent=database_agent,
+    agent=sql_agent,
 )
 
 # Define Crew
 crew = Crew(
-    agents=[database_agent],
-    tasks=[database_task],
+    agents=[sql_agent],
+    tasks=[sql_task],
     verbose=True,
     process=Process.sequential,
+    # memory = True,
+    # embedder= {
+    #             "provider": "google",
+    #             "config": {
+    #                 "api_key": google_api_key,
+    #                 "model": 'models/text-embedding-004'
+    #             }
+    #             },
+    # short_term_memory = ShortTermMemory(
+    #     storage = RAGStorage(
+    #             embedder_config= {
+    #                         "provider": "google",
+    #                         "config": {
+    #                             "api_key": google_api_key,
+    #                             "model": 'models/text-embedding-004'
+    #                         }
+    #                 },
+    #             type="short_term",
+    #             path="{storage_path}/memory.db".format(storage_path=storage_path)
+    #         )
+    #     ),
 )
+
 
 def run(input):
     # Validate input for required fields and check for missing parameters

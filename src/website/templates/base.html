@@ -3,22 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Book your stay with our professional hotel management system.">
     <title>{% block title %}Hotel Management{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
 <body>
     <header>
-        <h1>Hotel Management System</h1>
+        <h1 style="text-align: center;">
+            <a href="{{ url_for('index') }}" style="color: white; text-decoration: none;">Hotel Management System</a>
+        </h1>
         <nav>
             <ul class="nav-links">
                 <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="#">Bookings</a></li>
+                <li>
+                    <a href="{{ url_for('reservations') }}">
+                        Reservations
+                        {% if reservation_count is defined and reservation_count > 0 %}
+                            <span class="reservation-count">{{ reservation_count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
                 <li><a href="#">Contact Us</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
+    <main class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class="messages">
@@ -30,6 +41,106 @@
         {% endwith %}
         {% block content %}{% endblock %}
     </main>
+
+
+    <!-- Chatbot Icon -->
+<div class="chatbot-icon" id="chatbot-toggle">
+    <img src="{{ url_for('static', filename='chatbot-icon.png') }}" alt="Chatbot Icon" width="50" height="50">
+</div>
+
+<!-- Chatbot Interface -->
+<div class="chatbot-container" id="chatbot-container">
+    <div class="chatbot-header">
+        <h3>Hotel Assistant</h3>
+        <button class="chatbot-close" id="chatbot-close">✖</button>
+    </div>
+    <div class="chatbot-body" id="chatbot-messages">
+        <div class="message bot-message">Hello! How can I assist you today?</div>
+    </div>
+    <div class="chatbot-footer">
+        <input type="text" id="chatbot-input" placeholder="Type your message...">
+        <button class="btn" id="chatbot-send">Send</button>
+    </div>
+</div>
+
+<!-- JavaScript for Chatbot Toggle and Scrolling -->
+<script>
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const chatbotClose = document.getElementById('chatbot-close');
+    const chatbotSend = document.getElementById('chatbot-send');
+    const chatbotInput = document.getElementById('chatbot-input');
+    const chatbotMessages = document.getElementById('chatbot-messages');
+
+    // Function to scroll to bottom
+    function scrollToBottom() {
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+
+    // Toggle chatbot visibility
+    chatbotToggle.addEventListener('click', () => {
+        chatbotContainer.style.display = chatbotContainer.style.display === 'block' ? 'none' : 'block';
+        if (chatbotContainer.style.display === 'block') {
+            scrollToBottom();
+        }
+    });
+
+    chatbotClose.addEventListener('click', () => {
+        chatbotContainer.style.display = 'none';
+    });
+
+    // Send message to the server
+    async function sendMessage(message) {
+        const userMessage = document.createElement('div');
+        userMessage.className = 'message user-message';
+        userMessage.textContent = message;
+        chatbotMessages.appendChild(userMessage);
+        scrollToBottom();
+
+        try {
+            const response = await fetch('/query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: message }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            const botMessage = document.createElement('div');
+            botMessage.className = 'message bot-message';
+            botMessage.textContent = data.result || 'Sorry, I couldn’t process your request.';
+            chatbotMessages.appendChild(botMessage);
+            scrollToBottom();
+        } catch (error) {
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'message bot-message';
+            errorMessage.textContent = 'An error occurred: ' + error.message;
+            chatbotMessages.appendChild(errorMessage);
+            scrollToBottom();
+        }
+    }
+
+    // Send message on button click
+    chatbotSend.addEventListener('click', () => {
+        const message = chatbotInput.value.trim();
+        if (message) {
+            sendMessage(message);
+            chatbotInput.value = '';
+        }
+    });
+
+    // Allow sending message with Enter key
+    chatbotInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            chatbotSend.click();
+        }
+    });
+</script>
 
     <footer>
         <p>&copy; {{ current_year }} Hotel Management System. All Rights Reserved.</p>

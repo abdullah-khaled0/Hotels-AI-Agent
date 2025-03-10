@@ -1,3 +1,4 @@
+import datetime
 import os
 from flask import Flask, jsonify, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
@@ -80,6 +81,41 @@ def room_details(room_id):
     return render_template('room_details.html', room=room)
 
 
+
+@app.route('/reservations')
+def reservations():
+    # Fetch all reservations with hotel and room details
+    reservations = (Reservation.query
+                    .join(Room)
+                    .join(Hotel)
+                    .order_by(Reservation.check_in_date)
+                    .all())
+
+    return render_template('reservations.html', reservations=reservations)
+
+
+@app.route('/delete_reservation/<int:reservation_id>', methods=['GET'])
+def delete_reservation(reservation_id):
+    reservation = Reservation.query.get_or_404(reservation_id)
+    
+    try:
+        db.session.delete(reservation)
+        db.session.commit()
+        flash('Reservation deleted successfully.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error deleting reservation: {str(e)}', 'error')
+    
+    return redirect(url_for('reservations'))
+
+
+# Context processor to inject reservation_count
+@app.context_processor
+def inject_reservation_count():
+    # Use the same query as /reservations to ensure consistency
+    reservations = Reservation.query.all()  # Match the query used in reservations()
+    reservation_count = len(reservations)  # Simply count the list
+    return dict(reservation_count=reservation_count)
 
 @app.route('/query', methods=['POST'])
 def query_agent():

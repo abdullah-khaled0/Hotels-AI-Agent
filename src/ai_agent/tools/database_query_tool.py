@@ -3,7 +3,7 @@ from typing import Type
 from pydantic import BaseModel, Field
 from website.models.database import db
 from sqlalchemy import text
-
+from sqlalchemy.exc import SQLAlchemyError
 
 class DatabaseQueryToolInput(BaseModel):
     """Input schema for the Database Query Tool."""
@@ -12,7 +12,6 @@ class DatabaseQueryToolInput(BaseModel):
     filter_key: str = Field(None, description="Column name to filter on (used for 'find', 'update', 'delete')")
     filter_value: str = Field(None, description="Value to match for the filter_key")
     data: dict = Field(None, description="Data for 'create' or 'update' operations as a dictionary")
-
 
 class DatabaseQueryTool(BaseTool):
     name: str = "Database Query Tool"
@@ -26,12 +25,14 @@ class DatabaseQueryTool(BaseTool):
         """Executes SQL queries and returns the result."""
         try:
             with db.engine.connect() as connection:
-                result = connection.execute(text(sql_query), params)
-                if sql_query.strip().lower().startswith("select"):
-                    rows = result.fetchall()
-                    return "\n".join(str(row) for row in rows) if rows else "No records found."
-                return "Operation completed successfully."
-        except Exception as e:
+                # Begin a transaction
+                with connection.begin():
+                    result = connection.execute(text(sql_query), params)
+                    if sql_query.strip().lower().startswith("select"):
+                        rows = result.fetchall()
+                        return "\n".join(str(row) for row in rows) if rows else "No records found."
+                    return "Operation completed successfully."
+        except SQLAlchemyError as e:
             return f"Query execution error: {str(e)}"
 
     def _run(
@@ -43,8 +44,8 @@ class DatabaseQueryTool(BaseTool):
         data: dict = None,
     ) -> str:
         """Executes the specified database operation."""
-        # Validate inputs based on operation type
         operation_type = operation_type.lower()
+        # Input validation
         if operation_type == "find" and (not filter_key or not filter_value):
             return "Error: 'filter_key' and 'filter_value' are required for 'find' operation."
         elif operation_type == "create" and not data:
@@ -65,16 +66,19 @@ class DatabaseQueryTool(BaseTool):
             elif operation_type == "create":
                 columns = ", ".join(data.keys())
                 values = ", ".join(f":{key}" for key in data.keys())
-                sql_query = f"INSERT INTO {table_name} ({columns}) VALUES ({values});"
-                return self._execute_query(sql_query, data)
+                sql_query = f"INSERT INTO {table_name} ({columns}) VALUES ({values}) RETURNING *;"
+                result = self._execute_query(sql_query, data)
+                if "Query execution error" in result:
+                    return result
+                return f"Record created: {result}"
 
             elif operation_type == "update":
                 updates = ", ".join(f"{key} = :{key}" for key in data.keys())
-                sql_query = f"UPDATE {table_name} SET {updates} WHERE {filter_key} = :filter_value;"
+                sql_query = f"UPDATE {table_name} SET {updates} WHERE {filter_key} = :filter_value RETURNING *;"
                 return self._execute_query(sql_query, {**data, "filter_value": filter_value})
 
             elif operation_type == "delete":
-                sql_query = f"DELETE FROM {table_name} WHERE {filter_key} = :filter_value;"
+                sql_query = f"DELETE FROM {table_name} WHERE {filter_key} = :filter_value RETURNING *;"
                 return self._execute_query(sql_query, {"filter_value": filter_value})
 
         except Exception as e:

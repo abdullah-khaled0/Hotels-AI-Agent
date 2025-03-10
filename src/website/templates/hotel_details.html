@@ -1,24 +1,48 @@
 {% extends "base.html" %}
-{% block title %}{{ hotel.name }}{% endblock %}
+{% block title %}{{ hotel.name | default('Hotel Details') }}{% endblock %}
 
 {% block content %}
-<h2>{{ hotel.name }}</h2>
-<p><strong>Address:</strong> {{ hotel.address }}, {{ hotel.city }}, {{ hotel.country }}</p>
-<p><strong>Phone:</strong> {{ hotel.phone }}</p>
-<p><strong>Email:</strong> {{ hotel.email }}</p>
-<p><strong>Rating:</strong> ⭐ {{ hotel.star_rating }}</p>
-
-<h3>Available Rooms</h3>
-<div class="room-list">
-    {% for room in rooms %}
-    <div class="room-card">
-        <h4>Room {{ room.room_number }}</h4>
-        <p>Type: {{ room.room_type }}</p>
-        <p>Price: ${{ room.price_per_night }} per night</p>
-        <p>Capacity: {{ room.capacity }} persons</p>
-        <a href="{{ url_for('room_details', room_id=room.room_id) }}" class="btn">Reserve</a>
+<section class="hotel-details">
+    <!-- Hotel Header -->
+    <div class="hotel-header">
+        <div class="hotel-title">
+            <h2>{{ hotel.name | default('Hotel Not Found') }}</h2>
+            <p class="rating"><span class="star">★</span> {{ hotel.star_rating | default('N/A') }}</p>
+        </div>
     </div>
-    {% endfor %}
-</div>
-<a href="{{ url_for('index') }}" class="btn back-btn">Back to Home</a>
+
+    <!-- Hotel Info -->
+    {% if hotel %}
+    <div class="hotel-info">
+        <p><strong>Address:</strong> {{ hotel.address }}, {{ hotel.city }}, {{ hotel.country }}</p>
+        <p><strong>Phone:</strong> <a href="tel:{{ hotel.phone }}">{{ hotel.phone }}</a></p>
+        <p><strong>Email:</strong> <a href="mailto:{{ hotel.email }}">{{ hotel.email }}</a></p>
+    </div>
+
+    <!-- Rooms Section -->
+    <h3>Available Rooms</h3>
+    <div class="room-list">
+        {% for room in rooms %}
+        <div class="room-card">
+            <div class="room-details">
+                <h4>Room {{ room.room_number }}</h4>
+                <p><strong>Type:</strong> {{ room.room_type }}</p>
+                <p><strong>Price:</strong> <span class="price">${{ "%.2f" | format(room.price_per_night) }} / night</span></p>
+                <p><strong>Capacity:</strong> {{ room.capacity }} persons</p>
+            </div>
+            <a href="{{ url_for('room_details', room_id=room.room_id) }}" class="btn">Reserve Now</a>
+        </div>
+        {% else %}
+        <p class="no-rooms">No rooms available at this time. Check back later!</p>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="error">Sorry, this hotel could not be found.</p>
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="back-container">
+        <a href="{{ url_for('index') }}" class="btn back-btn">Back to Hotels</a>
+    </div>
+</section>
 {% endblock %}

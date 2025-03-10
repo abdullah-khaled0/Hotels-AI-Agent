@@ -1,196 +1,665 @@
 /* General Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #f9f9f9;
+    color: #381d84;
+    line-height: 1.6;
 }
 
-h2, h3 {
+h2, h3, h4 {
+    color: #2c3e50;
     text-align: center;
+    font-weight: 600;
+    margin: 0 0 20px;
 }
 
 /* Header */
 header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 15px 0;
+    background: linear-gradient(135deg, #063462, #34495e); /* Rich gradient colors */
+    color: #ecf0f1; /* Light text color for contrast */
+    padding: 20px 0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow for depth */
+    position: relative;
+    overflow: hidden; /* Ensures pseudo-elements stay within bounds */
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 200%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05); /* Subtle overlay for texture */
+    transform: rotate(-45deg);
+    animation: slide 10s linear infinite; /* Smooth sliding effect */
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(-50%) rotate(-45deg);
+    }
+    100% {
+        transform: translateX(50%) rotate(-45deg);
+    }
+}
+
+header h1 {
+    font-family: 'Arial', sans-serif; /* Modern font */
+    font-size: 2.5rem; /* Larger font size for prominence */
+    font-weight: bold;
     text-align: center;
+    text-transform: uppercase; /* Adds a professional touch */
+    letter-spacing: 2px; /* Spacing between letters for elegance */
+    margin: 0;
+    position: relative;
+    z-index: 1; /* Ensures text stays above pseudo-element */
+}
+
+header h1 a {
+    color: #ecf0f1; /* White text for visibility */
+    text-decoration: none;
+    transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+header h1 a:hover {
+    color: #ff6f61; /* Warm accent color on hover */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.2em;
+    font-weight: 600;
 }
 
 .nav-links {
     list-style: none;
-    padding: 0;
+    padding: 10px 0;
+    margin: 0;
     text-align: center;
 }
 
 .nav-links li {
     display: inline;
-    margin: 0 15px;
+    margin: 0 20px;
 }
 
 .nav-links a {
-    color: white;
+    color: #ecf0f1;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 400;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
 }
 
 .nav-links a:hover {
-    text-decoration: underline;
+    color: #3498db;
 }
 
 /* Container */
 .container {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    width: 85%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 25px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 /* Hotel List */
 .hotel-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
 }
 
 .hotel-card {
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hotel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
 }
 
 .hotel-card h3 {
-    margin: 10px 0;
+    margin: 0 0 12px;
+    color: #2980b9;
+    font-size: 1.5em;
 }
 
 .hotel-card p {
-    margin: 5px 0;
-    font-size: 14px;
+    margin: 10px 0;
+    font-size: 1em;
+    color: #34495e;
 }
 
 .hotel-card .btn {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 15px;
-    background: #3498db;
-    color: white;
+    display: block;
+    margin: 15px auto 0;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: #fff;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .hotel-card .btn:hover {
-    background: #2980b9;
+    background: linear-gradient(135deg, #2980b9, #1d6fa5);
+    transform: scale(1.05);
 }
 
 /* Room List */
 .room-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
 }
 
 .room-card {
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    text-align: center;
+    background: #fff;
+    padding: 0;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+.room-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 3px solid #27ae60;
 }
 
 .room-card h4 {
-    margin-bottom: 10px;
+    color: #27ae60;
+    margin: 12px 0;
+    font-size: 1.5em;
+    font-weight: 600;
+    text-align: center;
 }
 
 .room-card p {
-    font-size: 14px;
+    margin: 10px 0;
+    font-size: 1em;
+    color: #34495e;
+    text-align: center;
 }
 
 .room-card .btn {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 12px;
-    background: #27ae60;
-    color: white;
+    display: block;
+    margin: 15px auto 20px;
+    padding: 12px 25px;
+    width: 35%;
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: #fff;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .room-card .btn:hover {
-    background: #219150;
+    background: linear-gradient(135deg, #219150, #27ae60);
+    transform: scale(1.05);
 }
 
 /* Forms */
 form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 400px;
-    margin: auto;
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 25px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 label {
-    font-weight: bold;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    display: block;
 }
 
 input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     width: 100%;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    border-color: #3498db;
+    outline: none;
 }
 
 button {
-    background: #e74c3c;
-    color: white;
+    display: block;
+    width: 100%;
+    margin: 20px 0 0;
+    padding: 12px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: #fff;
     border: none;
-    padding: 10px;
+    border-radius: 30px;
+    font-size: 1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     cursor: pointer;
-    border-radius: 5px;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background: #c0392b;
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: scale(1.05);
+}
+
+/* Reservation List */
+.reservation-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
+}
+
+.reservation-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reservation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+
+/* Delete Button */
+.delete-btn {
+    display: inline-block;
+    margin: 15px auto 0;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    width: 60%; /* Adjust width as needed */
+    text-align: center;
+}
+
+.delete-btn:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: scale(1.05);
+}
+
+
+/* Reservation Count Badge */
+.reservation-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    margin-left: 8px;
+    padding: 0 6px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: #fff;
+    font-size: 0.9em;
+    font-weight: 600;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.nav-links a:hover .reservation-count {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: scale(1.1);
+}
+
+
+
+/* Hotel Details Section */
+.hotel-details {
+    padding: 40px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Hotel Header */
+.hotel-header {
+    position: relative;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.hotel-image {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    filter: brightness(90%);
+}
+
+.hotel-title {
+    position: relative;
+    width: 30%;
+    bottom: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(23, 94, 200, 0.289);
+    padding: 20px 40px;
+    border-radius: 15px;
+    color: #ecf0f1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hotel-title h2 {
+    margin: 0;
+    font-size: 2.5em;
+    font-weight: 600;
+}
+
+.rating {
+    margin: 8px 0 0;
+    font-size: 1.4em;
+}
+
+.star {
+    color: #f1c40f;
+    font-size: 1.5em;
+}
+
+/* Hotel Info */
+.hotel-info {
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.hotel-info p {
+    margin: 12px 0;
+    font-size: 1.15em;
+    color: #34495e;
+}
+
+.hotel-info a {
+    color: #2980b9;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.hotel-info a:hover {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+/* Room Cards (Consistent with .room-list) */
+.room-list .room-card {
+    background: #fff;
+    padding: 0;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.room-list .room-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+.room-list .room-details {
+    padding: 20px;
+}
+
+.price {
+    color: #e74c3c;
+    font-weight: 700;
+    font-size: 1.2em;
+}
+
+/* No Rooms Message */
+.no-rooms {
+    text-align: center;
+    font-size: 1.2em;
+    color: #7f8c8d;
+    padding: 30px;
+    background: #f4f4f4;
+    border-radius: 15px;
+}
+
+/* Error Message */
+.error {
+    text-align: center;
+    font-size: 1.3em;
+    color: #e74c3c;
+    padding: 30px;
+    background: #fefafa;
+    border-radius: 15px;
+}
+
+/* Back Button */
+.back-container {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.back-btn {
+    display: inline-block;
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.back-btn:hover {
+    background: linear-gradient(135deg, #2980b9, #1d6fa5);
+    transform: scale(1.05);
+}
+
+
+
+/* Chatbot Icon */
+.chatbot-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background 0.3s ease;
+    z-index: 1000;
+}
+
+.chatbot-icon:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(135deg, #2980b9, #1d6fa5);
+}
+
+.chatbot-icon img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Chatbot Container (Adjusted Position) */
+.chatbot-container {
+    position: fixed;
+    bottom: 80px; /* Moved up from 90px to ensure visibility */
+    right: 20px;
+    width: 350px;
+    height: 450px; /* Reduced height slightly to fit better on smaller screens */
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+/* Chatbot Header (Improved Design) */
+.chatbot-header {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #ecf0f1;
+    padding: 10px 15px; /* Reduced padding for a sleeker look */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    border-top-left-radius: 15px; /* Match container’s top corners */
+    border-top-right-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.chatbot-header h3 {
+    margin: 0;
+    font-size: 1.3em; /* Slightly smaller for balance */
+    font-weight: 600;
+    color: #ecf0f1;
+    letter-spacing: 0.5px; /* Matches site typography */
+}
+
+.chatbot-close {
+    background: #e74c3c; /* Red background for contrast */
+    border: none;
+    color: #fff;
+    font-size: 1em; /* Slightly smaller */
+    width: 24px;
+    height: 24px;
+    border-radius: 50%; /* Circular button */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.chatbot-close:hover {
+    background: #c0392b; /* Darker red on hover, matches delete button */
+    transform: scale(1.1);
+}
+
+/* Chatbot Body */
+.chatbot-body {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: scroll;
+    background: #f9f9f9;
+    height: calc(100% - 80px); /* Adjusted for new header/footer heights */
 }
 
 /* Messages */
-.messages {
-    list-style: none;
-    padding: 0;
-    text-align: center;
+.message {
+    margin: 10px 0;
+    padding: 10px 15px;
+    border-radius: 10px;
+    max-width: 80%;
+    font-size: 1em;
+    color: #fff;
+    word-wrap: break-word;
 }
 
-.messages li {
-    padding: 10px;
-    margin: 5px auto;
-    border-radius: 5px;
-    width: 50%;
+.bot-message {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    align-self: flex-start;
 }
 
-.messages .success {
-    background-color: #2ecc71;
-    color: white;
+.user-message {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    align-self: flex-end;
 }
 
-.messages .danger {
-    background-color: #e74c3c;
-    color: white;
+/* Chatbot Footer */
+.chatbot-footer {
+    padding: 10px 15px; /* Reduced padding for consistency */
+    display: flex;
+    border-top: 1px solid #ddd;
+    background: #fff;
+    flex-shrink: 0;
 }
+
+#chatbot-input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-right: 10px;
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+#chatbot-input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.btn#chatbot-send {
+    width: auto;
+    padding: 12px 25px;
+    margin: 0;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.btn#chatbot-send:hover {
+    background: linear-gradient(135deg, #2980b9, #1d6fa5);
+}
+
+
 
 /* Footer */
 footer {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #ecf0f1;
+    padding: 15px 0;
+    font-size: 0.9em;
     text-align: center;
-    background: #2c3e50;
-    color: white;
-    padding: 10px 0;
-    margin-top: 20px;
+    margin-top: 40px;
 }
